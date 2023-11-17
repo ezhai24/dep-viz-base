@@ -1,19 +1,33 @@
-import { React } from "react";
+import { React, useEffect, useState } from "react";
+
+import api from "../api";
 
 import { GraphStats } from "./GraphStats";
 import { GraphViz } from "./GraphViz";
 
 import "./styles.css";
-// import api from './api';
 
 export const DependencyVisualization = () => {
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const res = await api.fetchProjects();
+      setProjects(res);
+    };
+    fetchProjects();
+  }, []);
+
   return (
     <div className="depVizContainer">
       <h1>Project</h1>
       <select>
-        <option />
-        <option value="pid1">Placeholder Project Name 1</option>
-        <option value="pid2">Placeholder Project Name 2</option>
+        <option value="" />
+        {projects.map((project) => (
+          <option key={project.id} value={project.id}>
+            {project.name}
+          </option>
+        ))}
       </select>
 
       <GraphStats />
