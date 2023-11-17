@@ -1,6 +1,6 @@
 import { React } from "react";
 
-import "./dependency_viz.css";
+import "./styles.css";
 // import api from './api';
 
 export const DependencyVisualization = () => {
