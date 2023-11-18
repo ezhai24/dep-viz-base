@@ -3,7 +3,7 @@ import { React, useEffect, useState } from "react";
 import api from "../api";
 
 import { GraphStats } from "./GraphStats";
-import { GraphViz } from "./GraphViz";
+import { Visualization } from "./Visualization";
 
 import "./styles.css";
 
@@ -11,6 +11,8 @@ export const DependencyVisualization = () => {
   const [projects, setProjects] = useState([]);
   const [currentProjectId, setCurrentProjectId] = useState("");
   const [currentProject, setCurrentProject] = useState({});
+
+  const [isLoadingVis, setIsLoadingVis] = useState(false);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -35,14 +37,18 @@ export const DependencyVisualization = () => {
   }, [currentProjectId]);
 
   const selectProject = (e) => {
+    setIsLoadingVis(true);
+
     const projectId = e.target.value;
     setCurrentProjectId(projectId);
   };
 
+  const onVisLoaded = () => setIsLoadingVis(false);
+
   return (
     <div className="depVizContainer">
       <h1>Project</h1>
-      <select onChange={selectProject}>
+      <select onChange={selectProject} disabled={isLoadingVis}>
         <option value="" />
         {projects.map((project) => (
           <option key={project.id} value={project.id}>
@@ -52,7 +58,11 @@ export const DependencyVisualization = () => {
       </select>
 
       <GraphStats />
-      <GraphViz />
+      <Visualization
+        isLoadingVis={isLoadingVis}
+        onVisLoaded={onVisLoaded}
+        currentProject={currentProject}
+      />
     </div>
   );
 };
