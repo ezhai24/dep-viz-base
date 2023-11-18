@@ -1,7 +1,7 @@
 import Dagre from "@dagrejs/dagre";
 import PropTypes from "prop-types";
 import { React, useEffect, useState } from "react";
-import ReactFlow, { MarkerType, Position } from "reactflow";
+import ReactFlow, { Background, MarkerType, Position } from "reactflow";
 
 import "reactflow/dist/style.css";
 
@@ -45,7 +45,7 @@ const getLayoutedElements = (tasks, deps) => {
 };
 
 export const Visualization = (props) => {
-  const { isLoadingVis, onVisLoaded, currentProject } = props;
+  const { isLoadingVis, onVisLoaded, currentProject, className } = props;
   const { tasks, deps } = currentProject;
 
   const [layouted, setLayouted] = useState({ nodes: [], edges: [] });
@@ -61,7 +61,7 @@ export const Visualization = (props) => {
   }
 
   return (
-    <div style={{ height: "500px" }}>
+    <div className={`${className} h-full`}>
       <ReactFlow
         nodes={layouted.nodes}
         edges={layouted.edges}
@@ -70,7 +70,9 @@ export const Visualization = (props) => {
         zoomOnDoubleClick={false}
         preventScrolling={false}
         fitView
-      />
+      >
+        <Background />
+      </ReactFlow>
     </div>
   );
 };
@@ -83,13 +85,14 @@ Visualization.propTypes = {
       PropTypes.shape({
         id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
-      })
+      }),
     ),
     deps: PropTypes.arrayOf(
       PropTypes.shape({
         predecessor_id: PropTypes.string.isRequired,
         successor_id: PropTypes.string.isRequired,
-      })
+      }),
     ),
   }),
+  className: PropTypes.string,
 };

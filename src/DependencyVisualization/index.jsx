@@ -47,30 +47,36 @@ export const DependencyVisualization = () => {
   const onVisLoaded = () => setIsLoadingVis(false);
 
   return (
-    <>
-      <h1>Project</h1>
-      <select
-        onChange={selectProject}
-        disabled={isLoadingStats || isLoadingVis}
-      >
-        <option value="" />
-        {projects.map((project) => (
-          <option key={project.id} value={project.id}>
-            {project.name}
-          </option>
-        ))}
-      </select>
+    <div className="flex h-screen flex-col">
+      <div className="p-4">
+        <h1 className="mr-4 text-xl font-bold">Project</h1>
+        <select
+          className="rounded border-2 border-solid"
+          onChange={selectProject}
+          disabled={isLoadingStats || isLoadingVis}
+        >
+          <option value="" />
+          {projects.map((project) => (
+            <option key={project.id} value={project.id}>
+              {project.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
-      <Stats
-        isLoadingStats={isLoadingStats}
-        onStatsLoaded={onStatsLoaded}
-        currentProject={currentProject}
-      />
-      <Visualization
-        isLoadingVis={isLoadingVis}
-        onVisLoaded={onVisLoaded}
-        currentProject={currentProject}
-      />
-    </>
+      <div className="relative grow">
+        <Stats
+          className="absolute right-4 top-4"
+          isLoadingStats={isLoadingStats}
+          onStatsLoaded={onStatsLoaded}
+          currentProject={currentProject}
+        />
+        <Visualization
+          isLoadingVis={isLoadingVis}
+          onVisLoaded={onVisLoaded}
+          currentProject={currentProject}
+        />
+      </div>
+    </div>
   );
 };

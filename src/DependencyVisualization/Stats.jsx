@@ -9,7 +9,7 @@ const buildAdjacencyList = (tasks, deps) => {
   const adjacencyList = new Map();
   tasks.forEach((task) => adjacencyList.set(task.id, []));
   deps.forEach((dep) =>
-    adjacencyList.get(dep.predecessor_id).push(dep.successor_id)
+    adjacencyList.get(dep.predecessor_id).push(dep.successor_id),
   );
   return adjacencyList;
 };
@@ -30,13 +30,13 @@ const getMaxDepth = (adjacencyList, root) => {
   return (
     1 +
     Math.max(
-      ...adjacencyList.get(root).map((dep) => getMaxDepth(adjacencyList, dep))
+      ...adjacencyList.get(root).map((dep) => getMaxDepth(adjacencyList, dep)),
     )
   );
 };
 
 export const Stats = (props) => {
-  const { isLoadingStats, onStatsLoaded, currentProject } = props;
+  const { isLoadingStats, onStatsLoaded, currentProject, className } = props;
   const { tasks, deps } = currentProject;
 
   const [adjacencyList, setAdjacencyList] = useState(new Map());
@@ -63,29 +63,35 @@ export const Stats = (props) => {
   }, [tasks, deps]);
 
   return (
-    <>
-      <h2>Graph Stats</h2>
+    <div
+      className={`${className} border-slate-4300 z-10 w-fit rounded border-2 border-solid bg-white p-4`}
+    >
+      <h2 className="font-bold">Graph Stats</h2>
       <table>
         <tbody>
           <tr>
             <td>Task Count</td>
-            <td>{isLoadingStats ? "-" : tasks?.length || 0}</td>
+            <td className="pl-10">
+              {isLoadingStats ? "-" : tasks?.length || 0}
+            </td>
           </tr>
           <tr>
             <td>Dependency Count</td>
-            <td>{isLoadingStats ? "-" : deps?.length || 0}</td>
+            <td className="pl-10">
+              {isLoadingStats ? "-" : deps?.length || 0}
+            </td>
           </tr>
           <tr>
             <td>Root Count</td>
-            <td>{isLoadingStats ? "-" : rootNodes.size}</td>
+            <td className="pl-10">{isLoadingStats ? "-" : rootNodes.size}</td>
           </tr>
           <tr>
             <td>Max Depth</td>
-            <td>{isLoadingStats ? "-" : maxDepth}</td>
+            <td className="pl-10">{isLoadingStats ? "-" : maxDepth}</td>
           </tr>
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
 
@@ -97,13 +103,14 @@ Stats.propTypes = {
       PropTypes.shape({
         id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
-      })
+      }),
     ),
     deps: PropTypes.arrayOf(
       PropTypes.shape({
         predecessor_id: PropTypes.string.isRequired,
         successor_id: PropTypes.string.isRequired,
-      })
+      }),
     ),
   }),
+  className: PropTypes.string,
 };
