@@ -9,6 +9,8 @@ import "./styles.css";
 
 export const DependencyVisualization = () => {
   const [projects, setProjects] = useState([]);
+  const [currentProjectId, setCurrentProjectId] = useState("");
+  const [currentProject, setCurrentProject] = useState({});
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -18,10 +20,29 @@ export const DependencyVisualization = () => {
     fetchProjects();
   }, []);
 
+  useEffect(() => {
+    if (!currentProjectId) {
+      setCurrentProject({});
+      return;
+    }
+
+    const fetchProject = async () => {
+      const tasks = await api.fetchTasks(currentProjectId);
+      const deps = await api.fetchDependencies(currentProjectId);
+      setCurrentProject({ tasks, deps });
+    };
+    fetchProject();
+  }, [currentProjectId]);
+
+  const selectProject = (e) => {
+    const projectId = e.target.value;
+    setCurrentProjectId(projectId);
+  };
+
   return (
     <div className="depVizContainer">
       <h1>Project</h1>
-      <select>
+      <select onChange={selectProject}>
         <option value="" />
         {projects.map((project) => (
           <option key={project.id} value={project.id}>
