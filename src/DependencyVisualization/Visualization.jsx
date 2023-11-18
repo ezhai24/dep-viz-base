@@ -2,6 +2,7 @@ import Dagre from "@dagrejs/dagre";
 import PropTypes from "prop-types";
 import { React, useEffect, useState } from "react";
 import ReactFlow, { Background, MarkerType, Position } from "reactflow";
+import LoadingSpinner from "../LoadingSpinner";
 
 import "reactflow/dist/style.css";
 
@@ -57,7 +58,11 @@ export const Visualization = (props) => {
   }, [tasks, deps]);
 
   if (isLoadingVis) {
-    return <></>;
+    return (
+      <div className="flex h-full items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (
