@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 
 import api from "../api";
 
-import { GraphStats } from "./GraphStats";
+import { Stats } from "./Stats";
 import { Visualization } from "./Visualization";
 
 import "./styles.css";
@@ -12,6 +12,7 @@ export const DependencyVisualization = () => {
   const [currentProjectId, setCurrentProjectId] = useState("");
   const [currentProject, setCurrentProject] = useState({});
 
+  const [isLoadingStats, setIsLoadingStats] = useState(false);
   const [isLoadingVis, setIsLoadingVis] = useState(false);
 
   useEffect(() => {
@@ -37,18 +38,23 @@ export const DependencyVisualization = () => {
   }, [currentProjectId]);
 
   const selectProject = (e) => {
+    setIsLoadingStats(true);
     setIsLoadingVis(true);
 
     const projectId = e.target.value;
     setCurrentProjectId(projectId);
   };
 
+  const onStatsLoaded = () => setIsLoadingStats(false);
   const onVisLoaded = () => setIsLoadingVis(false);
 
   return (
     <div className="depVizContainer">
       <h1>Project</h1>
-      <select onChange={selectProject} disabled={isLoadingVis}>
+      <select
+        onChange={selectProject}
+        disabled={isLoadingStats || isLoadingVis}
+      >
         <option value="" />
         {projects.map((project) => (
           <option key={project.id} value={project.id}>
@@ -57,7 +63,11 @@ export const DependencyVisualization = () => {
         ))}
       </select>
 
-      <GraphStats />
+      <Stats
+        isLoadingStats={isLoadingStats}
+        onStatsLoaded={onStatsLoaded}
+        currentProject={currentProject}
+      />
       <Visualization
         isLoadingVis={isLoadingVis}
         onVisLoaded={onVisLoaded}
