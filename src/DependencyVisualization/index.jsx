@@ -51,7 +51,7 @@ export const DependencyVisualization = () => {
       <div className="p-4">
         <h1 className="mr-4 text-xl font-bold">Project</h1>
         <select
-          className="rounded border-2 border-solid"
+          className="min-w-[150px] rounded border-2 border-solid"
           onChange={selectProject}
           disabled={isLoadingStats || isLoadingVis}
         >
