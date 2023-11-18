@@ -5,8 +5,6 @@ import api from "../api";
 import { Stats } from "./Stats";
 import { Visualization } from "./Visualization";
 
-import "./styles.css";
-
 export const DependencyVisualization = () => {
   const [projects, setProjects] = useState([]);
   const [currentProjectId, setCurrentProjectId] = useState("");
@@ -49,7 +47,7 @@ export const DependencyVisualization = () => {
   const onVisLoaded = () => setIsLoadingVis(false);
 
   return (
-    <div className="depVizContainer">
+    <>
       <h1>Project</h1>
       <select
         onChange={selectProject}
@@ -73,6 +71,6 @@ export const DependencyVisualization = () => {
         onVisLoaded={onVisLoaded}
         currentProject={currentProject}
       />
-    </div>
+    </>
   );
 };
